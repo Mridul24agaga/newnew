@@ -64,20 +64,20 @@ export async function GET(request: Request) {
       },
       body: JSON.stringify({
         sender: {
-          name: "Mridul Thareja",
-          email: "hi@mridulthareja.com"
+          name: "Innvision Tech",
+          email: "info@innvision.tech"
         },
         to: [{
           email: contact.email
         }],
-        subject: "Get Ready ",
+        subject: "Welcome to Innvision Tech Newsletter!",
         htmlContent: `
           <!DOCTYPE html>
           <html lang="en">
             <head>
               <meta charset="UTF-8">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Skyrocket Your Agency & SaaS Growth with Insider Strategies!</title>
+              <title>Welcome to Innvision Tech Newsletter</title>
             </head>
             <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
               <h1 style="color: #2c3e50;">Welcome to Innvision Tech!</h1>
@@ -89,7 +89,7 @@ export async function GET(request: Request) {
                 <li>Audience growth tactics</li>
               </ul>
               <p>We're excited to share valuable insights to help grow your business!</p>
-              <p>Best regards,<br>Mridul Thareja/p>
+              <p>Best regards,<br>Innvision Tech Team</p>
             </body>
           </html>
         `
