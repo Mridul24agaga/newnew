@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     // If email doesn't exist or isn't in the list, proceed with subscription process
     const confirmationToken = Buffer.from(`${email}:${Date.now()}`).toString('base64')
 
-    // Add contact to Brevo without confirming
+    // Add contact to Brevo without adding to list or confirming
     const addContactResponse = await fetch('https://api.brevo.com/v3/contacts', {
       method: 'POST',
       headers: {
@@ -49,9 +49,9 @@ export async function POST(request: Request) {
         email,
         attributes: { 
           FIRSTNAME: name,
-          DOUBLE_OPT_IN: false
+          DOUBLE_OPT_IN: false,
+          CONFIRMATION_TOKEN: confirmationToken
         },
-        listIds: [parseInt(BREVO_LIST_ID!)],
         updateEnabled: true
       })
     })
@@ -71,8 +71,8 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         sender: {
-          name: "Mridul Thareja",
-          email: "hi@mridulthareja.com"
+          name: "Innvision Tech",
+          email: "info@innvision.tech"
         },
         to: [{ email, name }],
         subject: "Confirm your subscription",
@@ -86,7 +86,6 @@ export async function POST(request: Request) {
                  style="background-color: #6366f1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
                 Confirm Subscription
               </a>
-              <p>If you have recieved this email by mistake, please ignore it</p>
             </body>
           </html>
         `

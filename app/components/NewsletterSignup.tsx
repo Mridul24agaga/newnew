@@ -91,9 +91,9 @@ export function NewsletterSignup() {
         </p>
 
         {/* Form Card */}
-        <div className="w-full max-w-md bg-black/50 backdrop-blur-md rounded-[24px] p-8 shadow-2xl mb-8 relative z-10 transition-transform duration-300 hover:scale-105">
+        <div className="w-full max-w-md bg-white/10 backdrop-blur-sm rounded-[24px] p-8 shadow-2xl mb-8 relative z-10 transition-transform duration-300 hover:scale-105">
           {status === 'pending' ? (
-            <div className="text-center">
+            <div className="bg-black/80 backdrop-blur-sm rounded-lg p-6 text-center">
               <h2 className="text-2xl font-bold text-white mb-4">Almost there!</h2>
               <p className="text-gray-200">{message}</p>
             </div>

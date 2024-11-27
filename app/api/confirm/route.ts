@@ -4,39 +4,54 @@ const BREVO_API_KEY = process.env.BREVO_API_KEY
 const BREVO_LIST_ID = process.env.BREVO_LIST_ID
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
-  const token = searchParams.get('token')
-
-  if (!token) {
-    return NextResponse.json({ message: 'Confirmation token is required' }, { status: 400 })
-  }
-
-  const decodedToken = Buffer.from(token, 'base64').toString('utf-8')
-  const [email] = decodedToken.split(':')
-
-  if (!email) {
-    return NextResponse.json({ message: 'Invalid confirmation token' }, { status: 400 })
-  }
-
   try {
-    // Create contact in Brevo and add to list
-    const createContactResponse = await fetch('https://api.brevo.com/v3/contacts', {
-      method: 'POST',
+    const { searchParams } = new URL(request.url)
+    const token = searchParams.get('token')
+
+    if (!token) {
+      return NextResponse.json({ message: 'Invalid confirmation token' }, { status: 400 })
+    }
+
+    // Find the contact with the given confirmation token
+    const searchResponse = await fetch(`https://api.brevo.com/v3/contacts?attributes={"CONFIRMATION_TOKEN":"${token}"}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'api-key': BREVO_API_KEY!
+      }
+    })
+
+    if (!searchResponse.ok) {
+      throw new Error('Failed to find contact')
+    }
+
+    const searchData = await searchResponse.json()
+    if (searchData.contacts.length === 0) {
+      return NextResponse.json({ message: 'Invalid confirmation token' }, { status: 400 })
+    }
+
+    const contact = searchData.contacts[0]
+
+    // Update contact in Brevo to confirm and add to list
+    const updateContactResponse = await fetch(`https://api.brevo.com/v3/contacts/${contact.id}`, {
+      method: 'PUT',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'api-key': BREVO_API_KEY!
       },
       body: JSON.stringify({
-        email,
+        attributes: { 
+          DOUBLE_OPT_IN: true,
+          CONFIRMATION_TOKEN: null
+        },
         listIds: [parseInt(BREVO_LIST_ID!)],
         updateEnabled: true
       })
     })
 
-    if (!createContactResponse.ok) {
-      const error = await createContactResponse.json()
-      throw new Error(error.message || 'Failed to confirm subscription')
+    if (!updateContactResponse.ok) {
+      throw new Error('Failed to update contact')
     }
 
     // Send welcome email
@@ -49,39 +64,48 @@ export async function GET(request: Request) {
       },
       body: JSON.stringify({
         sender: {
-          name: "Mridul thareja",
-          email: "hi@mridulthareja.com"
+          name: "Innvision Tech",
+          email: "info@innvision.tech"
         },
         to: [{
-          email: email
+          email: contact.email
         }],
-        subject: "Welcome to Mridul Thareja Newsletter!",
-  htmlContent: `
-    <html>
-      <body style="font-family: Arial, sans-serif; line-height: 1.6;">
-        <h1 style="color: #333;">Welcome</h1>
-        <p>Thank you for confirming your subscription to our newsletter.</p>
-        <p>You’re now part of a community dedicated to mastering the art of client acquisition, outreach scripts, and audience growth strategies for agencies and SaaS businesses.</p>
-        <p>Each week, we’ll share actionable tips to help you grow your business through organic tactics across platforms like LinkedIn, Reddit, and beyond.</p>
-        <p>I’m Mridul Thareja, and I’m thrilled to guide you on this journey toward scaling your business with effective and organic growth strategies.</p>
-        <p>Welcome aboard!</p>
-        <p>Best regards,<br><strong>Mridul Thareja<br>Innvision Agency</strong></p>
-      </body>
-    </html>
+        subject: "Welcome to Innvision Tech Newsletter!",
+        htmlContent: `
+          <!DOCTYPE html>
+          <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Welcome to Innvision Tech Newsletter</title>
+            </head>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+              <h1 style="color: #2c3e50;">Welcome to Innvision Tech!</h1>
+              <p>Thank you for confirming your subscription to our newsletter.</p>
+              <p>You'll now receive our latest updates on:</p>
+              <ul>
+                <li>Client acquisition strategies</li>
+                <li>Effective outreach scripts</li>
+                <li>Audience growth tactics</li>
+              </ul>
+              <p>We're excited to share valuable insights to help grow your business!</p>
+              <p>Best regards,<br>Innvision Tech Team</p>
+            </body>
+          </html>
         `
       })
     })
 
     if (!sendWelcomeResponse.ok) {
-      const error = await sendWelcomeResponse.json()
-      throw new Error(error.message || 'Failed to send welcome email')
+      console.error('Failed to send welcome email:', await sendWelcomeResponse.text())
     }
 
     // Redirect to thank you page
     return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/thank-you`)
   } catch (error) {
     console.error('Confirmation error:', error)
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/error?message=${encodeURIComponent('Failed to confirm subscription. Please try again later.')}`)
+    // Redirect to an error page if there's an issue
+    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/error`)
   }
 }
 
