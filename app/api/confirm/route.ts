@@ -64,34 +64,25 @@ export async function GET(request: Request) {
       },
       body: JSON.stringify({
         sender: {
-          name: "Innvision Tech",
-          email: "info@innvision.tech"
+          name: "Mridul Thareja",
+          email: "hi@mridulthareja.com"
         },
         to: [{
           email: contact.email
         }],
-        subject: "Welcome to Innvision Tech Newsletter!",
-        htmlContent: `
-          <!DOCTYPE html>
-          <html lang="en">
-            <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Welcome to Innvision Tech Newsletter</title>
-            </head>
-            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-              <h1 style="color: #2c3e50;">Welcome to Innvision Tech!</h1>
-              <p>Thank you for confirming your subscription to our newsletter.</p>
-              <p>You'll now receive our latest updates on:</p>
-              <ul>
-                <li>Client acquisition strategies</li>
-                <li>Effective outreach scripts</li>
-                <li>Audience growth tactics</li>
-              </ul>
-              <p>We're excited to share valuable insights to help grow your business!</p>
-              <p>Best regards,<br>Innvision Tech Team</p>
-            </body>
-          </html>
+        subject: "Skyrocket Your Agency & SaaS Growth with Insider Strategies!",
+  htmlContent: `
+    <html>
+      <body style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h1 style="color: #333;">Welcome to Innvision Tech!</h1>
+        <p>Thank you for confirming your subscription to our newsletter.</p>
+        <p>You’re now part of a community dedicated to mastering the art of client acquisition, outreach scripts, and audience growth strategies for agencies and SaaS businesses.</p>
+        <p>Each week, we’ll share actionable tips to help you grow your business through organic tactics across platforms like LinkedIn, Reddit, and beyond.</p>
+        <p>I’m Mridul Thareja, and I’m thrilled to guide you on this journey toward scaling your business with effective and organic growth strategies.</p>
+        <p>Welcome aboard!</p>
+        <p>Best regards,<br><strong>Mridul Thareja<br>Innvision Tech Team</strong></p>
+      </body>
+    </html>
         `
       })
     })

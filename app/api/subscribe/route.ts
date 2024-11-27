@@ -71,8 +71,8 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         sender: {
-          name: "Innvision Tech",
-          email: "info@innvision.tech"
+          name: "Mridul Thareja",
+          email: "hi@mridulthareja.com"
         },
         to: [{ email, name }],
         subject: "Confirm your subscription",
