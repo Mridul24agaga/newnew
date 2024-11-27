@@ -71,8 +71,8 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         sender: {
-          name: "Innvision Tech",
-          email: "info@innvision.tech"
+          name: "Mridul Thareja",
+          email: "hi@mridulthareja.com"
         },
         to: [{ email, name }],
         subject: "Confirm your subscription",
@@ -86,6 +86,7 @@ export async function POST(request: Request) {
                  style="background-color: #6366f1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
                 Confirm Subscription
               </a>
+              <p>If you have recieved this email by mistake, please ignore it</p>
             </body>
           </html>
         `

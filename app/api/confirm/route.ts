@@ -5,10 +5,17 @@ const BREVO_LIST_ID = process.env.BREVO_LIST_ID
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const email = searchParams.get('email')
+  const token = searchParams.get('token')
+
+  if (!token) {
+    return NextResponse.json({ message: 'Confirmation token is required' }, { status: 400 })
+  }
+
+  const decodedToken = Buffer.from(token, 'base64').toString('utf-8')
+  const [email] = decodedToken.split(':')
 
   if (!email) {
-    return NextResponse.json({ message: 'Email is required' }, { status: 400 })
+    return NextResponse.json({ message: 'Invalid confirmation token' }, { status: 400 })
   }
 
   try {
@@ -42,8 +49,8 @@ export async function GET(request: Request) {
       },
       body: JSON.stringify({
         sender: {
-          name: "Innvision Tech",
-          email: "info@innvision.tech"
+          name: "Mridul thareja",
+          email: "hi@mridulthareja.com"
         },
         to: [{
           email: email
@@ -51,7 +58,6 @@ export async function GET(request: Request) {
         subject: "Welcome to Innvision Tech Newsletter!",
         htmlContent: `
           <html>
-            <head></head>
             <body>
               <h1>Welcome to Innvision Tech!</h1>
               <p>Thank you for confirming your subscription to our newsletter.</p>
@@ -72,9 +78,7 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/thank-you`)
   } catch (error) {
     console.error('Confirmation error:', error)
-    return NextResponse.json({ 
-      message: 'Failed to confirm subscription. Please try again later.' 
-    }, { status: 500 })
+    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/error?message=${encodeURIComponent('Failed to confirm subscription. Please try again later.')}`)
   }
 }
 
