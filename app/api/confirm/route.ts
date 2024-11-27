@@ -55,16 +55,19 @@ export async function GET(request: Request) {
         to: [{
           email: email
         }],
-        subject: "Welcome to Innvision Tech Newsletter!",
-        htmlContent: `
-          <html>
-            <body>
-              <h1>Welcome to Innvision Tech!</h1>
-              <p>Thank you for confirming your subscription to our newsletter.</p>
-              <p>You'll now receive our latest updates on client acquisition, outreach scripts, and audience growth strategies.</p>
-              <p>Best regards,<br>Innvision Tech Team</p>
-            </body>
-          </html>
+        subject: "Welcome to Mridul Thareja Newsletter!",
+  htmlContent: `
+    <html>
+      <body style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h1 style="color: #333;">Welcome</h1>
+        <p>Thank you for confirming your subscription to our newsletter.</p>
+        <p>You’re now part of a community dedicated to mastering the art of client acquisition, outreach scripts, and audience growth strategies for agencies and SaaS businesses.</p>
+        <p>Each week, we’ll share actionable tips to help you grow your business through organic tactics across platforms like LinkedIn, Reddit, and beyond.</p>
+        <p>I’m Mridul Thareja, and I’m thrilled to guide you on this journey toward scaling your business with effective and organic growth strategies.</p>
+        <p>Welcome aboard!</p>
+        <p>Best regards,<br><strong>Mridul Thareja<br>Innvision Agency</strong></p>
+      </body>
+    </html>
         `
       })
     })
