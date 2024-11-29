@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 
 const BREVO_API_KEY = process.env.BREVO_API_KEY
 const BREVO_LIST_ID = process.env.BREVO_LIST_ID
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://mridulthareja.com'
 
 export async function GET(request: Request) {
   try {
@@ -64,8 +65,8 @@ export async function GET(request: Request) {
       },
       body: JSON.stringify({
         sender: {
-          name: "Innvision Tech",
-          email: "info@innvision.tech"
+          name: "Mridul Thareja",
+          email: "hi@mridulthareja.com"
         },
         to: [{
           email: contact.email
@@ -101,11 +102,11 @@ export async function GET(request: Request) {
     }
 
     // Redirect to thank you page
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/thank-you`)
+    return NextResponse.redirect(`${APP_URL}/thank-you`)
   } catch (error) {
     console.error('Confirmation error:', error)
     // Redirect to an error page if there's an issue
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/error`)
+    return NextResponse.redirect(`${APP_URL}/error`)
   }
 }
 

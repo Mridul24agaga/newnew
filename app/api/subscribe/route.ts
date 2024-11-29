@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 
 const BREVO_API_KEY = process.env.BREVO_API_KEY
 const BREVO_LIST_ID = process.env.BREVO_LIST_ID
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://mridulthareja.com'
 
 export async function POST(request: Request) {
   try {
@@ -71,8 +72,8 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         sender: {
-          name: "Innvision Tech",
-          email: "info@innvision.tech"
+          name: "Mridul Thareja",
+          email: "hi@mridulthareja.com"
         },
         to: [{ email, name }],
         subject: "Confirm your subscription",
@@ -82,7 +83,7 @@ export async function POST(request: Request) {
               <h1>Hello ${name},</h1>
               <p>Thank you for subscribing to our newsletter!</p>
               <p>Please click the button below to confirm your subscription:</p>
-              <a href="${process.env.NEXT_PUBLIC_APP_URL}/api/confirm?token=${encodeURIComponent(confirmationToken)}" 
+              <a href="${APP_URL}/api/confirm?token=${encodeURIComponent(confirmationToken)}" 
                  style="background-color: #6366f1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
                 Confirm Subscription
               </a>
